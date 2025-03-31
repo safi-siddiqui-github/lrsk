@@ -1,3 +1,4 @@
+import SocialLogin from '@/components/auth/social-login';
 import PrimaryButton from '@/components/button/primary-button';
 import PrimaryHeading from '@/components/heading/primary-heading';
 import PrimaryInput from '@/components/input/primary-input';
@@ -50,6 +51,8 @@ export default function Page() {
                             <NormalLink href={route('login')}>Sign In</NormalLink>
                         </div>
                     </div>
+
+                    <SocialLogin />
 
                     <PrimaryInput
                         id="email"

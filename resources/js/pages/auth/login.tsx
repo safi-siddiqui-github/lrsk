@@ -1,3 +1,4 @@
+import SocialLogin from '@/components/auth/social-login';
 import PrimaryButton from '@/components/button/primary-button';
 import PrimaryHeading from '@/components/heading/primary-heading';
 import PrimaryCheckbox from '@/components/input/primary-checkbox';
@@ -51,6 +52,8 @@ export default function Page() {
                             <NormalLink href={route('register')}>Sign Up</NormalLink>
                         </div>
                     </div>
+
+                    <SocialLogin />
 
                     <PrimaryInput
                         id="email"

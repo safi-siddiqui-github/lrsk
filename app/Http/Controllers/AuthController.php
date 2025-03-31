@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\GithubLoginRequest;
+use App\Http\Requests\Auth\GoogleLoginRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\LogoutRequest;
 use App\Http\Requests\Auth\PasswordEmailRequest;
@@ -12,6 +14,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -83,5 +86,32 @@ class AuthController extends Controller
         $request->logout();
         // redirecting to home solves refresh issue
         return redirect()->route('home');
+    }
+
+    // Social Login
+    public function google_redirect()
+    {
+        // Cors issue when redirecting
+        $redirectUrl = Socialite::driver('google')->redirect()->getTargetUrl();
+        return response('', 409)->header('X-Inertia-Location', $redirectUrl);
+    }
+
+    public function google_callback(GoogleLoginRequest $request)
+    {
+        $request->login();
+        return redirect()->intended(route('home', absolute: false));
+    }
+
+    public function github_redirect()
+    {
+        // Cors issue when redirecting
+        $redirectUrl = Socialite::driver('github')->redirect()->getTargetUrl();
+        return response('', 409)->header('X-Inertia-Location', $redirectUrl);
+    }
+
+    public function github_callback(GithubLoginRequest $request)
+    {
+        $request->login();
+        return redirect()->intended(route('home', absolute: false));
     }
 }

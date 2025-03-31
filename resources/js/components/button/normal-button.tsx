@@ -7,7 +7,7 @@ export default function NormalButton({
 }: {
     children: ReactNode;
     addClasses?: string;
-    onClick: MouseEventHandler<HTMLButtonElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
 }) {
     return (
         <button type="button" className={`cursor-pointer px-2 py-1 font-medium ${addClasses}`} onClick={onClick}>
