@@ -9,13 +9,37 @@ Route::controller(PageController::class)->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::get('/loign', 'login')->name('login');
+
+    Route::middleware('guest')->group(function () {
+
+        Route::get('/login', 'login')->name('login');
+        Route::post('/loginForm', 'loginForm')->name('loginForm');
+
+        Route::get('/register', 'register')->name('register');
+        Route::post('/registerForm', 'registerForm')->name('registerForm');
+
+        Route::name('password.')->prefix('password')->group(function () {
+            Route::get('/forgot', 'passwordForgot')->name('request');
+            Route::post('/email', 'passwordEmail')->name('email');
+            Route::get('/reset/{token}', 'passwordReset')->name('reset');
+            Route::post('/reset', 'passwordResetForm')->name('resetForm');
+        });
+    });
+
+    Route::middleware('auth')->group(function () {
+
+        Route::name('verification.')->prefix('verification')->middleware('notVerified')->group(function () {
+            Route::get('/notice', 'verificationNotice')->name('notice');
+            Route::post('/resend', 'verificationResend')->name('resend');
+            Route::get('/email/verify/{id}/{hash}', 'verificationVerify')->name('verify')->middleware('signed');
+        });
+
+        Route::post('/logout', 'logout')->name('logout');
+    });
 });
 
-
-// Route::get('/', function () {
-//     return Inertia::render('welcome');
-// })->name('home');
+// Route::middleware(['auth', 'verified'])->group(function () {
+// });
 
 // Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::get('dashboard', function () {
@@ -23,5 +47,4 @@ Route::controller(AuthController::class)->group(function () {
 //     })->name('dashboard');
 // });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+// require __DIR__ . '/settings.php';

@@ -3,11 +3,10 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Validator;
 
-class LoginRequest extends FormRequest
+class PasswordEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,22 +25,27 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'email', 'exists:users,email', 'max:100'],
-            'password' => ['required', 'string', 'min:8', 'max:100'],
-            'remember' => ['boolean']
         ];
     }
 
     /**
-     * After Validation login your user.
+     * Send Password Reset Link.
      *
-     * @return void
+     * @return vpid
      */
-    public function login(): void
+    public function sendLink(): void
     {
-        if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $status = Password::sendResetLink(
+            $this->only('email')
+        );
+
+        if ($status !== Password::ResetLinkSent) {
             throw ValidationException::withMessages([
-                'email'  => 'Credentials are invalid.'
+                'email' => 'Error sending reset link'
             ]);
         }
+        // return $status === Password::ResetLinkSent
+        //     ? back()->with(['status' => __($status)])
+        //     : back()->withErrors(['email' => __($status)]);
     }
 }

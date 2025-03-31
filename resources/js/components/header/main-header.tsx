@@ -3,12 +3,17 @@ import NormalButton from '@/components/button/normal-button';
 import NormalLink from '@/components/link/normal-link';
 import PrimaryLink from '@/components/link/primary-link';
 import SecondaryLink from '@/components/link/secondary-link';
+import PrimaryLogout from '@/components/logout/primary-logout';
 import EmphasizeText from '@/components/text/emphasize-text';
 import { cn } from '@/lib/utils';
-import { Archive, ChartBarStacked, CircleX, Menu, ShoppingBag, ShoppingCart } from 'lucide-react';
+import { UserModelType } from '@/types/models';
+import { usePage } from '@inertiajs/react';
+import { Archive, ChartBarStacked, CircleX, Menu, Search, ShoppingBag, ShoppingCart } from 'lucide-react';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 export default function MainHeader() {
+    const { auth } = usePage<{ auth: { user: UserModelType } }>().props;
+
     const [openMenu, setOpenMenu] = useState(false);
 
     const toggleOpenMenu = useCallback(() => {
@@ -17,6 +22,11 @@ export default function MainHeader() {
 
     const navMenu = useMemo<{ title: string; href: string; icon: ReactNode }[]>(
         () => [
+            {
+                title: 'Search',
+                href: route('home'),
+                icon: <Search className="size-5" />,
+            },
             {
                 title: 'Cart',
                 href: route('home'),
@@ -43,7 +53,7 @@ export default function MainHeader() {
 
     return (
         <div className="relative">
-            <header className="flex items-center justify-between border-b border-slate-500 px-2 py-1 sm:py-2 sm:px-4 sm:pr-6">
+            <header className="flex items-center justify-between border-b border-slate-500 px-2 py-1 sm:px-4 sm:py-2 sm:pr-6">
                 <NormalLink href={route('home')} addClasses="text-lg tracking-tight">
                     LRSVES
                 </NormalLink>
@@ -57,15 +67,37 @@ export default function MainHeader() {
                 <nav className="hidden items-center gap-2 sm:flex">
                     <nav className="hidden sm:flex">
                         {navMenu.map(({ title, href, icon }, index) => (
-                            <NormalLink key={`NavMenu-${index}`} href={href} addClasses="flex items-center gap-2">
-                                {icon}
-                                {title}
+                            <NormalLink
+                                key={`NavMenu-${index}`}
+                                href={href}
+                                addClasses="flex items-center gap-2 hover:outline active:outline rounded"
+                                title={title}
+                            >
+                                <span className="">{icon}</span>
+                                <span className="hidden md:inline-block">{title}</span>
                             </NormalLink>
                         ))}
                     </nav>
 
                     <MainToggleAppearance />
-                    <PrimaryLink href={route('home')}>Login</PrimaryLink>
+
+                    <div
+                        className={cn('', {
+                            hidden: auth?.user,
+                            flex: !auth?.user,
+                        })}
+                    >
+                        <PrimaryLink href={route('login')}>Login</PrimaryLink>
+                    </div>
+
+                    <div
+                        className={cn('', {
+                            hidden: !auth?.user,
+                            flex: auth?.user,
+                        })}
+                    >
+                        <PrimaryLogout />
+                    </div>
                 </nav>
             </header>
 
@@ -108,12 +140,39 @@ export default function MainHeader() {
 
                         <div className="flex flex-col items-center gap-2">
                             <EmphasizeText>LRSVES Members</EmphasizeText>
-                            <p className="text-center">
+                            <p
+                                className={cn('text-center', {
+                                    hidden: auth?.user,
+                                    flex: !auth?.user,
+                                })}
+                            >
                                 Join and become our member at LRSVES. Sign in with your account to have exclusive deals and much more.
                             </p>
-                            <div className="flex flex-wrap items-center gap-2">
-                                <PrimaryLink href={route('home')}>Login</PrimaryLink>
+                            <div
+                                className={cn('flex-wrap items-center gap-2', {
+                                    hidden: auth?.user,
+                                    flex: !auth?.user,
+                                })}
+                            >
+                                <PrimaryLink href={route('login')}>Login</PrimaryLink>
                                 <SecondaryLink href={route('home')}>Register</SecondaryLink>
+                            </div>
+                            <p
+                                className={cn('text-center', {
+                                    hidden: !auth?.user,
+                                    flex: auth?.user,
+                                })}
+                            >
+                                Welcome {auth?.user?.name ?? 'User'}
+                            </p>
+
+                            <div
+                                className={cn('', {
+                                    hidden: !auth?.user,
+                                    flex: auth?.user,
+                                })}
+                            >
+                                <PrimaryLogout />
                             </div>
                         </div>
                     </div>
