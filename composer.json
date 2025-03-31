@@ -1,11 +1,16 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "laravel/react-auth-starter-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Minimalist Laravel Authentication React Starter Kit",
     "keywords": [
         "laravel",
-        "framework"
+        "framework",
+        "react",
+        "inertia",
+        "tailwind",
+        "html",
+        "css"
     ],
     "license": "MIT",
     "require": {
