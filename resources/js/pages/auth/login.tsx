@@ -43,7 +43,7 @@ export default function Page() {
                 >
                     <div className="flex flex-col gap-2">
                         <div className="flex flex-wrap items-center gap-1">
-                            <PrimaryHeading>LRSVES</PrimaryHeading>
+                            <PrimaryHeading>LRSK</PrimaryHeading>
                             <EmphasizeText>login</EmphasizeText>
                         </div>
 

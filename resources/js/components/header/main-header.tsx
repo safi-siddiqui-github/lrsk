@@ -55,7 +55,7 @@ export default function MainHeader() {
         <div className="relative">
             <header className="flex items-center justify-between border-b border-slate-500 px-2 py-1 sm:px-4 sm:py-2 sm:pr-6">
                 <NormalLink href={route('home')} addClasses="text-lg tracking-tight">
-                    LRSVES
+                    LRSK
                 </NormalLink>
 
                 <nav className="flex items-center">

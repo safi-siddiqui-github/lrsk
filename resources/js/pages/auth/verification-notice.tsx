@@ -28,7 +28,7 @@ export default function Page() {
                 >
                     <div className="flex flex-col items-center gap-2">
                         <div className="flex flex-wrap items-center gap-1">
-                            <PrimaryHeading>LRSVES</PrimaryHeading>
+                            <PrimaryHeading>LRSK</PrimaryHeading>
                             <EmphasizeText>verification notice</EmphasizeText>
                         </div>
 
