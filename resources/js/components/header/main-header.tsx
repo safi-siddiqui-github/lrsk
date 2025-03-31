@@ -24,27 +24,27 @@ export default function MainHeader() {
         () => [
             {
                 title: 'Search',
-                href: route('home'),
+                href: route('dashboard'),
                 icon: <Search className="size-5" />,
             },
             {
                 title: 'Cart',
-                href: route('home'),
+                href: route('dashboard'),
                 icon: <ShoppingBag className="size-5" />,
             },
             {
                 title: 'Products',
-                href: route('home'),
+                href: route('dashboard'),
                 icon: <ShoppingCart className="size-5" />,
             },
             {
                 title: 'Categories',
-                href: route('home'),
+                href: route('dashboard'),
                 icon: <ChartBarStacked className="size-5" />,
             },
             {
                 title: 'Orders',
-                href: route('home'),
+                href: route('dashboard'),
                 icon: <Archive className="size-5" />,
             },
         ],

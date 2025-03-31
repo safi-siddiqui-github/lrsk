@@ -11,4 +11,8 @@ class PageController extends Controller
     {
         return Inertia::render('home');
     }
+    public function dashboard()
+    {
+        return Inertia::render('dashboard');
+    }
 }

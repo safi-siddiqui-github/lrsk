@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -38,6 +39,7 @@ class GithubLoginRequest extends FormRequest
     public function login(): void
     {
         $socialUser = Socialite::driver('github')->user();
+        $newUser = false;
 
         $username = $socialUser->getName() ?? $socialUser->getNickname();
         $username = Str::of($username)->lower();
@@ -49,6 +51,7 @@ class GithubLoginRequest extends FormRequest
             $user = new User();
             $user->email = $email;
             $user->username = $username;
+            $newUser = true;
         }
 
         $user->avatar = $socialUser->getAvatar();
@@ -56,6 +59,11 @@ class GithubLoginRequest extends FormRequest
         $user->github_id = $socialUser->getId();
         $user->github_token = $socialUser->token;
         $user->save();
+
+        if ($newUser) {
+            // Verifiaction Email
+            event(new Registered($user));
+        }
 
         Auth::login($user, $remember = true);
         $this->session()->regenerate();

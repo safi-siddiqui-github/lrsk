@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -38,6 +39,7 @@ class GoogleLoginRequest extends FormRequest
     public function login(): void
     {
         $socialUser = Socialite::driver('google')->user();
+        $newUser = false;
 
         $username = $socialUser->getName() ?? $socialUser->getNickname();
         $username = Str::of($username)->lower();
@@ -56,6 +58,11 @@ class GoogleLoginRequest extends FormRequest
         $user->google_id = $socialUser->getId();
         $user->google_token = $socialUser->token;
         $user->save();
+
+        if ($newUser) {
+            // Verifiaction Email
+            event(new Registered($user));
+        }
 
         Auth::login($user, $remember = true);
         $this->session()->regenerate();

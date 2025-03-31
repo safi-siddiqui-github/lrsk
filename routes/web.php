@@ -57,5 +57,8 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // Build something amazing
-// Route::middleware(['auth', 'verified'])->group(function () {
-// });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::controller(PageController::class)->group(function () {
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
+    });
+});
